@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>8 Naturals Certificate Generation</title>
+  <style>
+    /* Style for form */
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f3f4f6;
+      margin: 0;
+      padding: 20px;
+    }
+
+    .form-container, .certificate-container {
+      max-width: 1000px; /* Increased max-width for larger certificate */
+      margin: auto;
+      padding: 20px;
+      background-color: #ffffff;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .form-container h2 {
+      text-align: center;
+      color: #388e3c;
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    label {
+      display: block;
+      color: #333;
+      font-weight: bold;
+    }
+
+    input[type="text"], input[type="date"] {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      box-sizing: border-box;
+    }
+
+    button {
+      width: 100%;
+      padding: 10px;
+      background-color: #388e3c;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #2e7032;
+    }
+
+    /* Certificate styling */
+    .certificate-container {
+      display: none; /* Hidden until form submission */
+      padding: 40px;
+      border: 12px solid #388e3c;
+      border-radius: 15px;
+      color: #333;
+      position: relative;
+      background: #fdfdfd; /* White background with texture */
+    }
+
+    .certificate-header {
+      text-align: center;
+      font-size: 36px;
+      color: #388e3c;
+      font-weight: bold;
+      margin-bottom: 10px;
+      font-family: 'Georgia', serif;
+    }
+
+    .certificate-content {
+      font-size: 20px;
+      text-align: center;
+      margin: 20px 0;
+      font-family: 'Georgia', serif;
+      color: #2e2e2e;
+    }
+
+    .certificate-footer {
+      text-align: center;
+      margin-top: 30px;
+      font-size: 18px;
+      color: #388e3c;
+      font-family: 'Georgia', serif;
+    }
+
+    .qr-code {
+      position: absolute;
+      right: 50px;
+      bottom: 50px;
+      width: 120px;
+      height: 120px;
+    }
+
+    .signature {
+      width: 150px;
+      margin: auto;
+      display: block;
+      margin-top: 10px;
+    }
+
+    /* Add tree and plant illustrations */
+    .certificate-container::before {
+      content: "";
+      position: absolute;
+      top: -20px;
+      left: -20px;
+      right: -20px;
+      bottom: -20px;
+      background-image: url('https://cdn.pixabay.com/photo/2016/04/01/09/17/tree-1297387_960_720.png'); /* Large green tree illustration */
+      background-size: 150px;
+      background-repeat: no-repeat;
+      background-position: top left;
+      opacity: 0.2;
+    }
+    
+    .certificate-container::after {
+      content: "";
+      position: absolute;
+      top: -20px;
+      left: -20px;
+      right: -20px;
+      bottom: -20px;
+      background-image: url('https://cdn.pixabay.com/photo/2016/04/01/09/17/tree-1297387_960_720.png');
+      background-size: 150px;
+      background-repeat: no-repeat;
+      background-position: bottom right;
+      opacity: 0.2;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Part 1: Certificate Form -->
+<div class="form-container">
+  <h2>8 Naturals Certificate Generation</h2>
+  <form id="certificateForm">
+    <div class="form-group">
+      <label for="buyerName">Buyer Name:</label>
+      <input type="text" id="buyerName" required>
+    </div>
+    <div class="form-group">
+      <label for="plantBought">Plant Bought:</label>
+      <input type="text" id="plantBought" required>
+    </div>
+    <div class="form-group">
+      <label for="issueDate">Issued Date:</label>
+      <input type="date" id="issueDate" required>
+    </div>
+    <button type="button" onclick="generateCertificate()">Generate Certificate</button>
+  </form>
+</div>
+
+<!-- Part 2: Certificate Display -->
+<div class="certificate-container" id="certificate">
+  <div class="certificate-header">Certificate of Appreciation</div>
+  <div class="certificate-content">
+    <p>This is to certify that <strong id="buyerNameDisplay"></strong> has purchased a wonderful plant, <strong id="plantBoughtDisplay"></strong>,</p>
+    <p>on the date of <strong id="issueDateDisplay"></strong>.</p>
+    <p>Thank you for contributing to the preservation of our environment. By planting native plants, you support local biodiversity, enhance ecosystems, and help create a greener, healthier future for all.</p>
+    <p>Certificate No: <strong id="certificateNo"></strong></p>
+  </div>
+  <img src="sign.png" alt="Signature" class="signature">
+  <div class="certificate-footer">
+    Signed by Mr. Anant Tayade<br>
+    Founder of 8 Naturals<br>
+    8 Naturals - Live Green, Care Green
+  </div>
+  <img src="" class="qr-code" id="qrCode">
+</div>
+
+<button onclick="downloadCertificate()" style="display: none;" id="downloadButton">Download Certificate</button>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+<script>
+   
+      // Determine the QR code URL based on the plant name
+      function generateCertificate() {
+    const buyerName = document.getElementById("buyerName").value;
+    const plantBought = document.getElementById("plantBought").value;
+    const issueDate = document.getElementById("issueDate").value;
+
+    // Display values on the certificate
+    document.getElementById("buyerNameDisplay").innerText = buyerName;
+    document.getElementById("plantBoughtDisplay").innerText = plantBought;
+    document.getElementById("issueDateDisplay").innerText = issueDate;
+
+    // Set certificate number (you can replace this with a more dynamic approach)
+    document.getElementById("certificateNo").innerText = Math.floor(Math.random() * 10000); // Random number for demo
+
+    // Determine the QR code URL based on the plant name
+    let qrCodeUrl;
+
+    switch (plantBought.toLowerCase().trim()) {
+        case "behda":
+            qrCodeUrl = "https://8naturals.wordpress.com/2023/04/08/%e0%a4%ac%e0%a5%87%e0%a4%b9%e0%a4%a6%e0%a4%be/";
+            break;
+        case "parijatak":
+            qrCodeUrl = "https://8naturals.wordpress.com/2023/02/03/%e0%a4%aa%e0%a4%be%e0%a4%b0%e0%a4%bf%e0%a4%9a%e0%a4%be%e0%a4%a4%e0%a4%95/";
+            break;
+        case "sitaphal":
+            qrCodeUrl = "https://8naturals.wordpress.com/2023/02/03/%e0%a4%b8%e0%a5%80%e0%a4%a4%e0%a4%be%e0%a4%ab%e0%a4%b3/";
+            break;
+        case "peru":
+            qrCodeUrl = "https://8naturals.wordpress.com/2023/02/03/%e0%a4%aa%e0%a5%87%e0%a4%b0%e0%a5%82/";
+            break;
+        case "putranjiva":
+            qrCodeUrl = "https://8naturals.wordpress.com/2023/02/03/%e0%a4%aa%e0%a5%81%e0%a4%a4%e0%a5%8d%e0%a4%b0%e0%a4%82%e0%a4%9a%e0%a5%80%e0%a4%b5%e0%a4%be/";
+            break;
+        case "bibba":
+            qrCodeUrl = "https://8naturals.wordpress.com/2023/02/04/%e0%a4%ac%e0%a4%bf%e0%a4%ac%e0%a5%8d%e0%a4%ac%e0%a4%be/";
+            break;
+        case "aamba":
+            qrCodeUrl = "https://8naturals.wordpress.com/2023/02/04/%e0%a4%86%e0%a4%82%e0%a4%ac%e0%a4%be/";
+            break;
+        case "adulsa":
+            qrCodeUrl = "https://8naturals.wordpress.com/2023/02/04/%e0%a4%85%e0%a4%a1%e0%a5%81%e0%a4%b3%e0%a4%b8%e0%a4%be/";
+            break;
+        case "katesavar":
+            qrCodeUrl = "https://8naturals.wordpress.com/2023/02/02/%e0%a4%95%e0%a4%be%e0%a4%9f%e0%a5%87%e0%a4%b8%e0%a4%be%e0%a4%b5%e0%a4%b0/";
+            break;
+        case "kanchan":
+            qrCodeUrl = "https://8naturals.wordpress.com/2023/02/02/%e0%a4%ac%e0%a4%b9%e0%a4%be%e0%a4%b5%e0%a4%be/";
+            break;
+        default:
+            qrCodeUrl = "https://8naturals.wordpress.com/about/";
+    }
+
+    // Generate QR code image
+    document.getElementById("qrCode").src = `https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(qrCodeUrl)}&size=120x120`;
+
+    // Show certificate and download button
+    document.getElementById("certificate").style.display = "block";
+    document.getElementById("downloadButton").style.display = "block";
+}
+
+function downloadCertificate() {
+    // Use html2canvas to capture the certificate, including the QR code
+    html2canvas(document.getElementById("certificate")).then(canvas => {
+        const link = document.createElement("a");
+        link.download = "8_Naturals_Certificate.png";
+        link.href = canvas.toDataURL("image/png");
+        link.click();
+    });
+}
+
+
+        if (plantBought.toLowerCase() === "KATESAVAR") {
+            qrCodeUrl = "https://8naturals.wordpress.com/2023/02/02/%e0%a4%95%e0%a4%be%e0%a4%9f%e0%a5%87%e0%a4%b8%e0%a4%be%e0%a4%b5%e0%a4%b0/ ";
+        if (plantBought.toLowerCase() === "KANCHAN") {
+            qrCodeUrl = " https://8naturals.wordpress.com/2023/02/02/%e0%a4%ac%e0%a4%b9%e0%a4%be%e0%a4%b5%e0%a4%be/";
+    
+    } else {
+        qrCodeUrl = `https://8naturals.wordpress.com/about/&size=120x120`;
+      }
+  
+      // Generate QR code image
+      document.getElementById("qrCode").src = `https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(qrCodeUrl)}&size=120x120`;
+  
+      // Show certificate and download button
+      document.getElementById("certificate").style.display = "block";
+      document.getElementById("downloadButton").style.display = "block";
+    }
+  
+    function downloadCertificate() {
+      // Use html2canvas to capture the certificate, including the QR code
+      html2canvas(document.getElementById("certificate")).then(canvas => {
+        const link = document.createElement("a");
+        link.download = "8_Naturals_Certificate.png";
+        link.href = canvas.toDataURL("image/png");
+        link.click();
+      });
+    }
+  </script>
+  
+
+</body>
+</html>
