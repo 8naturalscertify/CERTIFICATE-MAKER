@@ -187,12 +187,16 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
 <script>
-   
-      // Determine the QR code URL based on the plant name
-      function generateCertificate() {
-    const buyerName = document.getElementById("buyerName").value;
-    const plantBought = document.getElementById("plantBought").value;
+function generateCertificate() {
+    const buyerName = document.getElementById("buyerName").value.trim();
+    const plantBought = document.getElementById("plantBought").value.trim();
     const issueDate = document.getElementById("issueDate").value;
+
+    // Check if any field is empty
+    if (!buyerName || !plantBought || !issueDate) {
+        alert("Please fill in all fields before generating the certificate.");
+        return;
+    }
 
     // Display values on the certificate
     document.getElementById("buyerNameDisplay").innerText = buyerName;
@@ -204,38 +208,11 @@
 
     // Determine the QR code URL based on the plant name
     let qrCodeUrl;
-
     switch (plantBought.toLowerCase().trim()) {
         case "behda":
             qrCodeUrl = "https://8naturals.wordpress.com/2023/04/08/%e0%a4%ac%e0%a5%87%e0%a4%b9%e0%a4%a6%e0%a4%be/";
             break;
-        case "parijatak":
-            qrCodeUrl = "https://8naturals.wordpress.com/2023/02/03/%e0%a4%aa%e0%a4%be%e0%a4%b0%e0%a4%bf%e0%a4%9a%e0%a4%be%e0%a4%a4%e0%a4%95/";
-            break;
-        case "sitaphal":
-            qrCodeUrl = "https://8naturals.wordpress.com/2023/02/03/%e0%a4%b8%e0%a5%80%e0%a4%a4%e0%a4%be%e0%a4%ab%e0%a4%b3/";
-            break;
-        case "peru":
-            qrCodeUrl = "https://8naturals.wordpress.com/2023/02/03/%e0%a4%aa%e0%a5%87%e0%a4%b0%e0%a5%82/";
-            break;
-        case "putranjiva":
-            qrCodeUrl = "https://8naturals.wordpress.com/2023/02/03/%e0%a4%aa%e0%a5%81%e0%a4%a4%e0%a5%8d%e0%a4%b0%e0%a4%82%e0%a4%9a%e0%a5%80%e0%a4%b5%e0%a4%be/";
-            break;
-        case "bibba":
-            qrCodeUrl = "https://8naturals.wordpress.com/2023/02/04/%e0%a4%ac%e0%a4%bf%e0%a4%ac%e0%a5%8d%e0%a4%ac%e0%a4%be/";
-            break;
-        case "aamba":
-            qrCodeUrl = "https://8naturals.wordpress.com/2023/02/04/%e0%a4%86%e0%a4%82%e0%a4%ac%e0%a4%be/";
-            break;
-        case "adulsa":
-            qrCodeUrl = "https://8naturals.wordpress.com/2023/02/04/%e0%a4%85%e0%a4%a1%e0%a5%81%e0%a4%b3%e0%a4%b8%e0%a4%be/";
-            break;
-        case "katesavar":
-            qrCodeUrl = "https://8naturals.wordpress.com/2023/02/02/%e0%a4%95%e0%a4%be%e0%a4%9f%e0%a5%87%e0%a4%b8%e0%a4%be%e0%a4%b5%e0%a4%b0/";
-            break;
-        case "kanchan":
-            qrCodeUrl = "https://8naturals.wordpress.com/2023/02/02/%e0%a4%ac%e0%a4%b9%e0%a4%be%e0%a4%b5%e0%a4%be/";
-            break;
+        // Add more cases as needed
         default:
             qrCodeUrl = "https://8naturals.wordpress.com/about/";
     }
@@ -257,36 +234,6 @@ function downloadCertificate() {
         link.click();
     });
 }
-
-
-        if (plantBought.toLowerCase() === "KATESAVAR") {
-            qrCodeUrl = "https://8naturals.wordpress.com/2023/02/02/%e0%a4%95%e0%a4%be%e0%a4%9f%e0%a5%87%e0%a4%b8%e0%a4%be%e0%a4%b5%e0%a4%b0/ ";
-        if (plantBought.toLowerCase() === "KANCHAN") {
-            qrCodeUrl = " https://8naturals.wordpress.com/2023/02/02/%e0%a4%ac%e0%a4%b9%e0%a4%be%e0%a4%b5%e0%a4%be/";
-    
-    } else {
-        qrCodeUrl = `https://8naturals.wordpress.com/about/&size=120x120`;
-      }
-  
-      // Generate QR code image
-      document.getElementById("qrCode").src = `https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(qrCodeUrl)}&size=120x120`;
-  
-      // Show certificate and download button
-      document.getElementById("certificate").style.display = "block";
-      document.getElementById("downloadButton").style.display = "block";
-    }
-  
-    function downloadCertificate() {
-      // Use html2canvas to capture the certificate, including the QR code
-      html2canvas(document.getElementById("certificate")).then(canvas => {
-        const link = document.createElement("a");
-        link.download = "8_Naturals_Certificate.png";
-        link.href = canvas.toDataURL("image/png");
-        link.click();
-      });
-    }
-  </script>
-  
-
+</script>
 </body>
 </html>
