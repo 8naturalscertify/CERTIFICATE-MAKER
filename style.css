@@ -1,0 +1,26 @@
+.certificate-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 36px;
+    color: #388e3c;
+    font-weight: bold;
+    margin-bottom: 10px;
+    font-family: 'Georgia', serif;
+  }
+  
+  .certificate-header .logo {
+    width: 50px; /* Adjust size as needed */
+    height: 50px; /* Keep square dimensions */
+    margin-right: 15px; /* Add space between the logo and heading text */
+  }
+
+  
+#downloadButton, #shareButton {
+    margin-top: 10px; /* Adds space above each button */
+  }
+  
+  #downloadButton {
+    margin-right: 10px; /* Adds space between the two buttons */
+  }
+  
